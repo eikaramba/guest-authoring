@@ -156,6 +156,8 @@ Inside of `[slug]`, create a new file called `+page.js`. This is a dynamic route
 page URL which will change the `params` object. Evidently this will lead to SvelteKit invalidate the `.page.js` data and
 refetch our page data.
 
+::: code-group
+
 ```js [+page.js]
 /** @type {import('./$types').PageLoad} */
 import { error } from '@sveltejs/kit';
@@ -173,6 +175,20 @@ export async function load({ fetch, params }) {
 	}
 }
 ```
+
+
+```svelte [+page.svelte]
+<script>
+	/** @type {import('./$types').PageData} */
+	export let data;
+</script>
+
+
+<h1>{data.page.title}</h1>
+<div>{@html data.page.content}</div>
+```
+
+:::
 
 Go to http://localhost:5173/about, replacing `about` with any of your item slugs. Using the Directus JavaScript SDK, the
 single item with that slug is retrieved, and the page should show your data. `readItem()` only checks against your
