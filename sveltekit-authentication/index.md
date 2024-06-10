@@ -178,7 +178,7 @@ const register = async ({ cookies, request, url }) => {
 	const redirectedFrom = url.searchParams.get('redirectedFrom')
 	
 	//a) First create the user
-	let signupRequest = await fetch(`${PUBLIC_APIURL}/users`, {
+	let signupRequest = await fetch(`${PUBLIC_APIURL}/users/register`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -210,22 +210,18 @@ const register = async ({ cookies, request, url }) => {
 export const actions = { login,register }
 ```
 
-## Setup Directus Roles
+## Enable User Registration and Setup Directus Roles 
 
-Before you open `http://localhost:5173/signup` and create a new test user, let us define a new role called `user` which all new users will inherit upon creating an account.
+Before you open `http://localhost:5173/signup` and create a new test user, let's define a new default role called `user` which all new users will inherit upon creating an account. Within the Directus Admin App go to Settings -> Access Control -> Create new Role and name it `Users`. App Access should be enabled.
 
-Within the Directus Admin App go to Settings -> Access Control -> Create new Role and name it `Users`. App Access should be enabled.
 
-Also note down the role id from the url while you are in the Access Role page of the new Role.
+Next up you need to enable user registration in Directus. This can be done in the Directus Admin App under Settings -> Settings -> Enable "User Registration". For more information see https://docs.directus.io/user-guide/user-management/users.html#enable-user-registration. You then have to set this new role as the default role for new accounts.
 
-To make this role the default for new registered users and also to enable public non-authenticated users to register themself, go to Access Control -> public and customize the create permission of the directus_users collection. Make sure that only email and password field permissions are set and as a default field use the following setting:
-```
-{
-		"role": "<YOUR ROLE ID>"
-}
-```
+::: tip
 
-Here you will need to enter the Role ID from before. It could for example look like this
+If you want to test the registration process, you should also disable "Verify Email" on the same screen. Otherwise, you will need to adapt the registration code above to not directly login the user but instead show a message that the user needs to verify his email first.
+
+:::
 
 ![example default user role](default-role.webp).
 
